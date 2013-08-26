@@ -1,39 +1,23 @@
-import javax.swing.JFrame;
-import javax.swing.SwingUtilities;
-
-public class Main extends JFrame {
-
-    public Main() {
-        
-       setTitle("Not Super Pong");
-       setSize(900, 450);
-       setLocationRelativeTo(null);
-       setDefaultCloseOperation(EXIT_ON_CLOSE);   
-       
-		MyRunnable myRunnable = new MyRunnable();
-		Thread myThread = new Thread(myRunnable);
-		myThread.start();
-		        
-    }
+public class Main {
     
+    //private Player p1;
+    //private Player p2;
 
     public static void main(String[] args) {
+    		
+        // Create the GameEngine object and start it
+		GameEngine engine = new GameEngine();
+        Thread eThread = new Thread(engine);
+        eThread.start();
         
-        SwingUtilities.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                Main ex = new Main();
-                ex.setVisible(true);
-            }
-        });
+        // Start the main Frame
+        MainFrame mframe = new MainFrame(engine);
+        mframe.setVisible(true);
+        
+        // Start the menu frame
+        //MenuPanel menu = new MenuPanel();
+        //menu.setVisible(true);
     
     }
-}
 
-class MyRunnable implements Runnable {
-	public void run(){
-		while(true){
-			GameEngine game = new GameEngine();
-		}
-	}
 }
