@@ -1,7 +1,8 @@
+/*
+ * Main Class, that gets everything started
+ */
+
 public class Main {
-    
-    //private Player p1;
-    //private Player p2;
 
     public static void main(String[] args) {
     		

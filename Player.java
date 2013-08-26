@@ -1,13 +1,20 @@
+/*
+ * Player Class controls everything to do with the player
+ * - Keeps track of the position and movement of the paddle
+*/      
+
 public class Player {
     
+    // Tracks the player number.  Used in place of a player name at this point. 
     private static int playerNumber = 1;
     
+    // Tracks paddle attributes
     private int pos_x;
     private int pos_y;
-    
     private int paddleWidth;
     private int paddleHeight;
     
+    // Default player constructor
     public Player() {
         
         if (playerNumber == 1) {
@@ -26,6 +33,7 @@ public class Player {
         paddleWidth = 20;
         paddleHeight = 100;
         
+        // Debug info.
         System.out.println("Created Player " + playerNumber + ".");
         
         playerNumber++;
