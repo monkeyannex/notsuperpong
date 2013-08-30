@@ -15,6 +15,8 @@ public class GameEngine implements Runnable {
         
         //  Creates and empty JComponent that will house the MainFrame JComponent.  This allows the engine to repaint the screen every engine cycle
         private JComponent c;
+        
+        private Ball b;
 
         // Default constructor
         public GameEngine() {
@@ -37,6 +39,13 @@ public class GameEngine implements Runnable {
                 // Show engine loop number for debug purposes
                 // System.out.println("Engine loop count is " + engineLoopCount);
                 //engineLoopCount++;
+                
+                if (b != null) {
+                    
+                    b.updatePos();
+                    
+                }
+                else System.out.println("Ball does not exist yet.");
                 
                 // repaint the screen, but only if the screen is ready to be repainted.
                 if (c != null) {
@@ -61,6 +70,12 @@ public class GameEngine implements Runnable {
         public void setComponent(JComponent component) {
             
             c = component;
+            
+        }
+        
+        public void setBall(Ball ball) {
+            
+            b = ball;
             
         }
 

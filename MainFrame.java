@@ -21,6 +21,8 @@ public class MainFrame extends JFrame implements KeyListener {
     public static Player p1;
     public static Player p2;
     
+    public static Ball ball;
+    
     // create the empty game engine object that is passed to the constructor
     public static GameEngine e;
 
@@ -29,6 +31,8 @@ public class MainFrame extends JFrame implements KeyListener {
         
         p1 = new Player();
         p2 = new Player();
+        
+        ball = new Ball();
         
         e = engine;
         
@@ -49,6 +53,8 @@ public class MainFrame extends JFrame implements KeyListener {
         
         // pass the component to the engine to allow repainting every engine cycle
         e.setComponent(c);
+        
+        e.setBall(ball);
         
         // not really sure what this does, but i think we need it to actually start the Content Pane in the JFrame
         setContentPane(c);
@@ -83,6 +89,10 @@ public class MainFrame extends JFrame implements KeyListener {
             dbg.setColor(Color.green);
             dbg.fillRect(p2.getPosX(), p2.getPosY(), p2.getPadWidth(), p2.getPadHeight());
             
+            // draw the ball
+            dbg.setColor(Color.red);
+            dbg.fillOval(ball.getPosX(), ball.getPosY(), ball.getSize(), ball.getSize());
+                        
             //draws the initial image to the screen
             g.drawImage(dbi, 0, 0, this);
             
