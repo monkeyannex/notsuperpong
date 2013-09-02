@@ -5,7 +5,8 @@ public class Ball {
     
     private int size;
     
-    private int speed;
+    private int speed_x;
+    private int speed_y;
     
     public Ball() {
         
@@ -14,7 +15,8 @@ public class Ball {
         
         size = 10;
         
-        speed = 2;
+        speed_x = 5;
+        speed_y = 5;
         
         System.out.println("Ball created.");
         
@@ -22,9 +24,34 @@ public class Ball {
     
     public void updatePos() {
         
-        pos_x += speed;
+        pos_x += speed_x;
         
-        pos_y += speed;
+        pos_y += speed_y;
+        
+    }
+    
+    public void invertSpeedX() {
+        
+        speed_x = -speed_x;
+        
+    }
+    
+    public void invertSpeedY() {
+        
+        speed_y = -speed_y;
+        
+    }
+    
+    public void setSpeed(int s) {
+        
+        
+        
+    }
+    
+    public void resetPos() {
+        
+        pos_x = 445;
+        pos_y = 220;
         
     }
     

@@ -13,6 +13,7 @@ public class Player {
     private int pos_y;
     private int paddleWidth;
     private int paddleHeight;
+    private int score;
     
     // Default player constructor
     public Player() {
@@ -33,6 +34,8 @@ public class Player {
         paddleWidth = 20;
         paddleHeight = 100;
         
+        score = 0;
+        
         // Debug info.
         System.out.println("Created Player " + playerNumber + ".");
         
@@ -43,6 +46,18 @@ public class Player {
     public void movePaddle(int dist) {
         
         pos_y += dist;
+        
+    }
+    
+    public void incrementScore() {
+        
+        score++;
+        
+    }
+    
+    public int getScore() {
+        
+        return score;
         
     }
     

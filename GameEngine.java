@@ -11,17 +11,24 @@ public class GameEngine implements Runnable {
         private static int engineLoopCount;
         
         //  The amount of the between Engine Loops in milliseconds
-        private static int engineSleep = 100;
+        private static int engineSleep = 25;
+        
+        private boolean paused;
         
         //  Creates and empty JComponent that will house the MainFrame JComponent.  This allows the engine to repaint the screen every engine cycle
         private JComponent c;
         
         private Ball b;
+        
+        private Player p1;
+        private Player p2;
 
         // Default constructor
         public GameEngine() {
             
             System.out.println("Engine Created.");
+            
+            paused = false;
             
         }
 
@@ -34,26 +41,33 @@ public class GameEngine implements Runnable {
             engineLoopCount = 0;
             
             // Contains the code to run on each loop
-            while(true){
+            while(true) {
+                
+                // so only run the main engine while not paused
+                if (!paused) {
 			
-                // Show engine loop number for debug purposes
-                // System.out.println("Engine loop count is " + engineLoopCount);
-                //engineLoopCount++;
+                    // Show engine loop number for debug purposes
+                    // System.out.println("Engine loop count is " + engineLoopCount);
+                    //engineLoopCount++;
                 
-                if (b != null) {
-                    
-                    b.updatePos();
-                    
-                }
-                else System.out.println("Ball does not exist yet.");
+                    if (b != null) {
                 
-                // repaint the screen, but only if the screen is ready to be repainted.
-                if (c != null) {
+                        collisionDetect();
                     
-                    c.repaint();
+                        b.updatePos();
                     
+                    }
+                    else System.out.println("Ball does not exist yet.");
+                
+                    // repaint the screen, but only if the screen is ready to be repainted.
+                    if (c != null) {
+                    
+                        c.repaint();
+                    
+                    }
+                    else System.out.println("Cannot repaint screen.");
+                
                 }
-                else System.out.println("Cannot repaint screen.");
                 
                 // attempt to sleep the thread
                 try {
@@ -61,8 +75,63 @@ public class GameEngine implements Runnable {
                 } 
                 catch (InterruptedException ie) {
                     System.out.println(ie);
-                }						
+                }
             }
+            
+        }
+        
+        private void collisionDetect() {
+            
+            int pos_x = b.getPosX();
+            int pos_y = b.getPosY();
+            
+            if ( pos_x < -10 ) {
+                
+                p2.incrementScore();
+                b.resetPos();
+                //b.invertSpeedX();
+                
+            }
+            
+            if ( pos_x > 900 ) {
+                
+                p1.incrementScore();
+                b.resetPos();
+                //b.invertSpeedX();
+                
+            }
+            
+            // detect collision with the top and bottom of the screen
+            if ( pos_y <= 0 ) b.invertSpeedY();
+            if ( pos_y >= 440 ) b.invertSpeedY();
+            
+            // detect collision with player 1 paddle
+            if ( pos_x >= p1.getPosX() -10 && pos_x <= p1.getPosX() + p1.getPadWidth()) {
+                
+                if (pos_y >= p1.getPosY() && pos_y <= p1.getPosY() + p1.getPadHeight() ) {
+                    
+                    b.invertSpeedX();
+                
+                }
+                
+            }
+            
+            // detect collision with player 2 paddle
+            if ( pos_x >= p2.getPosX() -10 && pos_x <= p2.getPosX() + p2.getPadWidth()) {
+                
+                if (pos_y >= p2.getPosY() && pos_y <= p2.getPosY() + p2.getPadHeight() ) {
+                    
+                    b.invertSpeedX();
+                
+                }
+                
+            }
+            
+        }
+        
+        public void togglePause() {
+            
+            paused = !paused;
             
         }
         
@@ -76,6 +145,13 @@ public class GameEngine implements Runnable {
         public void setBall(Ball ball) {
             
             b = ball;
+            
+        }
+        
+        public void setPlayer(Player p) {
+            
+            if (p1 != null ) p2 = p;
+            else p1 = p;
             
         }
 

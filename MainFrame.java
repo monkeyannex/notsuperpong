@@ -56,6 +56,9 @@ public class MainFrame extends JFrame implements KeyListener {
         
         e.setBall(ball);
         
+        e.setPlayer(p1);
+        e.setPlayer(p2);
+        
         // not really sure what this does, but i think we need it to actually start the Content Pane in the JFrame
         setContentPane(c);
         
@@ -85,12 +88,20 @@ public class MainFrame extends JFrame implements KeyListener {
             dbg.setColor(Color.blue);
             dbg.fillRect(p1.getPosX(), p1.getPosY(), p1.getPadWidth(), p1.getPadHeight());
             
+            // draw Player 1 score
+            dbg.setColor(Color.white);
+            dbg.drawString("Player 1: " + p1.getScore(), 100, 20);
+            
             // draw Player 2 paddle
             dbg.setColor(Color.green);
             dbg.fillRect(p2.getPosX(), p2.getPosY(), p2.getPadWidth(), p2.getPadHeight());
             
+            // draw Player 2 score
+            dbg.setColor(Color.white);
+            dbg.drawString("Player 2: " + p2.getScore(), 800, 20);
+            
             // draw the ball
-            dbg.setColor(Color.red);
+            dbg.setColor(Color.white);
             dbg.fillOval(ball.getPosX(), ball.getPosY(), ball.getSize(), ball.getSize());
                         
             //draws the initial image to the screen
@@ -101,34 +112,43 @@ public class MainFrame extends JFrame implements KeyListener {
     }
     
     // allows code to run on a keypress
-    public void keyPressed(KeyEvent e) {
+    public void keyPressed(KeyEvent evt) {
         
-        char key = e.getKeyChar();
+        int key = evt.getKeyCode();
         
         System.out.println("KEYPRESS: " + key);
         
         switch (key) {
             
-            case 'w':
+            // 'w'
+            case 87:
             
                 p1.movePaddle(-10);
                 break;
-                
-            case 's':
+            
+            // 's'    
+            case 83:
             
                 p1.movePaddle(10);
                 break;
-                
-            case 'o':
+            
+            // 'o'    
+            case 79:
             
                 p2.movePaddle(-10);
                 break;
-                
-            case 'l':
+            
+            // 'l'    
+            case 76:
             
                 p2.movePaddle(10);
                 break;
             
+            // escape
+            case 27:
+                
+                e.togglePause();
+                break;
         }
         
     }
