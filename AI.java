@@ -4,7 +4,7 @@ public class AI extends Player{
     public void runAI(int xPos, int yPos){
         
        //movePaddle(1);
-       setPosX(xPos);
+       //setPosX(xPos);
        setPosY(yPos);        
     }
     
