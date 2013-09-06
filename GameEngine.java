@@ -2,7 +2,7 @@
  * Game Engine
  *      - Creates a seperate thread so the engine can run while the graphics are displayed and input taken. 
  */
-
+import java.util.Random;
 import javax.swing.JComponent;
 
 public class GameEngine implements Runnable {
@@ -59,7 +59,7 @@ public class GameEngine implements Runnable {
                         
                         //AI
                         if (p2 != null) {
-                            p2.runAI(b.getPosX(), b.getPosY());
+                            p2.runAI(b.getPosX(), b.getPosY(), b.getSpeedX());
                         }
                                            
                     }
@@ -94,7 +94,7 @@ public class GameEngine implements Runnable {
             if ( pos_x < -10 ) {
                 
                 p2.incrementScore();
-                b.resetPos();
+                resetGame();              
                 //b.invertSpeedX();
                 
             }
@@ -102,7 +102,7 @@ public class GameEngine implements Runnable {
             if ( pos_x > 900 ) {
                 
                 p1.incrementScore();
-                b.resetPos();
+                resetGame();
                 //b.invertSpeedX();
                 
             }
@@ -117,6 +117,7 @@ public class GameEngine implements Runnable {
                 if (pos_y >= p1.getPosY() && pos_y <= p1.getPosY() + p1.getPadHeight() ) {
                     
                     b.invertSpeedX();
+                    b.increaseSpeed();
                 
                 }
                 
@@ -128,6 +129,7 @@ public class GameEngine implements Runnable {
                 if (pos_y >= p2.getPosY() && pos_y <= p2.getPosY() + p2.getPadHeight() ) {
                     
                     b.invertSpeedX();
+                    b.increaseSpeed();
                 
                 }
                 
@@ -163,6 +165,27 @@ public class GameEngine implements Runnable {
         public void setAIPlayer(AI p) {
             
             p2 = p;
+            
+        }
+        
+        public void resetGame(){
+            
+            //Define random x/y variables
+            Random rand = new Random();
+                        
+            b.resetPos();
+            b.setSpeed(5);
+            
+            if(rand.nextInt(2) == 1){
+                b.invertSpeedX();
+            }
+            
+            if(rand.nextInt(2) == 1){
+                b.invertSpeedY();
+            }
+            
+            p1.setPosY(175);
+            p2.setPosY(175);
             
         }
 

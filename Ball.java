@@ -1,3 +1,5 @@
+import java.util.Random;
+
 public class Ball {
     
     private int pos_x;
@@ -42,16 +44,19 @@ public class Ball {
         
     }
     
-    public void setSpeed(int s) {
+    public void setSpeed(int newSpeed) {
         
-        
+        speed_x = newSpeed;
+        speed_y = newSpeed;
         
     }
     
     public void resetPos() {
         
+        Random rand = new Random();
+                
         pos_x = 445;
-        pos_y = 220;
+        pos_y = rand.nextInt(400) + 25;
         
     }
     
@@ -72,5 +77,30 @@ public class Ball {
         return size;
         
     }
+
+    public int getSpeedX() {
+        
+        return speed_x;
+        
+    }   
+    
+     public void increaseSpeed() {
+        
+        if (speed_x > 0){
+            speed_x++;
+        }
+        else{
+            speed_x--;
+        }
+    
+        if (speed_y > 0){
+            speed_y++;
+        }
+        else{
+            speed_y--;
+        }    
+    
+        
+    }      
     
 }

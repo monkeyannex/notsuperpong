@@ -85,4 +85,16 @@ public class Player {
         
     }
     
+    public void setPosX(int newX) {
+        
+        pos_x = newX;
+        
+    }
+    
+    public void setPosY(int newY) {
+        
+        pos_y = newY;
+        
+    }
+    
 }
