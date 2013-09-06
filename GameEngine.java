@@ -21,7 +21,8 @@ public class GameEngine implements Runnable {
         private Ball b;
         
         private Player p1;
-        private Player p2;
+        //private Player p2;
+        private AI p2;
 
         // Default constructor
         public GameEngine() {
@@ -55,7 +56,12 @@ public class GameEngine implements Runnable {
                         collisionDetect();
                     
                         b.updatePos();
-                    
+                        
+                        //AI
+                        if (p2 != null) {
+                            p2.runAI(b.getPosX(), b.getPosY());
+                        }
+                                           
                     }
                     else System.out.println("Ball does not exist yet.");
                 
@@ -150,8 +156,13 @@ public class GameEngine implements Runnable {
         
         public void setPlayer(Player p) {
             
-            if (p1 != null ) p2 = p;
-            else p1 = p;
+            p1 = p;
+            
+        }
+
+        public void setAIPlayer(AI p) {
+            
+            p2 = p;
             
         }
 

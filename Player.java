@@ -6,14 +6,14 @@
 public class Player {
     
     // Tracks the player number.  Used in place of a player name at this point. 
-    private static int playerNumber = 1;
+    public static int playerNumber = 1;
     
     // Tracks paddle attributes
-    private int pos_x;
-    private int pos_y;
-    private int paddleWidth;
-    private int paddleHeight;
-    private int score;
+    public int pos_x;
+    public int pos_y;
+    public int paddleWidth;
+    public int paddleHeight;
+    public int score;
     
     // Default player constructor
     public Player() {

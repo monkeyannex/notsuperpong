@@ -19,7 +19,8 @@ public class MainFrame extends JFrame implements KeyListener {
     private static Graphics dbg;
     
     public static Player p1;
-    public static Player p2;
+    //public static Player p2;
+    public static AI p2;
     
     public static Ball ball;
     
@@ -30,7 +31,8 @@ public class MainFrame extends JFrame implements KeyListener {
     public MainFrame(GameEngine engine) {
         
         p1 = new Player();
-        p2 = new Player();
+        //p2 = new Player();
+        p2 = new AI();
         
         ball = new Ball();
         
@@ -57,7 +59,8 @@ public class MainFrame extends JFrame implements KeyListener {
         e.setBall(ball);
         
         e.setPlayer(p1);
-        e.setPlayer(p2);
+        //e.setPlayer(p2);
+        e.setAIPlayer(p2);
         
         // not really sure what this does, but i think we need it to actually start the Content Pane in the JFrame
         setContentPane(c);
