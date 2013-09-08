@@ -15,10 +15,9 @@ public class MainFrame extends JFrame implements KeyListener {
     
     // creates the objects that will handle double buffering
     // this will stop flicker when objects on the screen move
-    private static Image dbi;
-    private static Graphics dbg;
     
-    public static Player p1;
+    //public static Player p1;
+    public static AI p1;
     //public static Player p2;
     public static AI p2;
     
@@ -30,9 +29,10 @@ public class MainFrame extends JFrame implements KeyListener {
     // default constructor that accepts the engine object
     public MainFrame(GameEngine engine) {
         
-        p1 = new Player();
-        //p2 = new Player();
-        p2 = new AI();
+        //p1 = new Player(1);
+        p1 = new AI(1);
+        //p2 = new Player(2);
+        p2 = new AI(2);
         
         ball = new Ball();
         
@@ -58,9 +58,9 @@ public class MainFrame extends JFrame implements KeyListener {
         
         e.setBall(ball);
         
-        e.setPlayer(p1);
+        e.setPlayer1(p1);
         //e.setPlayer(p2);
-        e.setAIPlayer(p2);
+        e.setPlayer2(p2);
         
         // not really sure what this does, but i think we need it to actually start the Content Pane in the JFrame
         setContentPane(c);
@@ -73,42 +73,40 @@ public class MainFrame extends JFrame implements KeyListener {
     // actually does the work in starting the drawing component
     static class Component extends JComponent {
         
-        public void paint(Graphics g) {
+        public void paint(Graphics gg) {
             
             // initialises the double buffering
-            if (dbi == null) {
-                
-                dbi = createImage (width, height);
-                dbg = dbi.getGraphics();
-                
-            }
+            Graphics2D g = (Graphics2D) gg;
             
+            g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+            
+            /*
+             * Background Layer
+             */
+              
             // draws the background black
-            dbg.setColor(Color.black);
-            dbg.fillRect(0,0,width, height);
+            g.setColor(Color.black);
+            g.fillRect(0,0,width, height);
+            
+            // draw a debug grid over the background
+            debugGrid(g);
             
             // draw Player 1 paddle
-            dbg.setColor(Color.blue);
-            dbg.fillRect(p1.getPosX(), p1.getPosY(), p1.getPadWidth(), p1.getPadHeight());
+            p1.drawPaddle(g);
             
             // draw Player 1 score
-            dbg.setColor(Color.white);
-            dbg.drawString("Player 1: " + p1.getScore(), 100, 20);
+            g.setColor(Color.white);
+            g.drawString("Player 1: " + p1.getScore(), 100, 20);
             
             // draw Player 2 paddle
-            dbg.setColor(Color.green);
-            dbg.fillRect(p2.getPosX(), p2.getPosY(), p2.getPadWidth(), p2.getPadHeight());
+            p2.drawPaddle(g);
             
             // draw Player 2 score
-            dbg.setColor(Color.white);
-            dbg.drawString("Player 2: " + p2.getScore(), 800, 20);
+            g.setColor(Color.white);
+            g.drawString("Player 2: " + p2.getScore(), 800, 20);
             
             // draw the ball
-            dbg.setColor(Color.white);
-            dbg.fillOval(ball.getPosX(), ball.getPosY(), ball.getSize(), ball.getSize());
-                        
-            //draws the initial image to the screen
-            g.drawImage(dbi, 0, 0, this);
+            ball.drawBall(g);
             
         }
         
@@ -166,6 +164,65 @@ public class MainFrame extends JFrame implements KeyListener {
     // allows code to run when a key is typed
     public void keyTyped(KeyEvent e) {
         
+        
+        
+    }
+    
+    // draws a grid over the background
+    // used for debug purposes
+    private static void debugGrid(Graphics2D g) {
+        
+        int vertLinePos = 449;
+        int horiLinePos = 224;
+        int lineWidth = 2;
+        int lineSpacing = 50;
+        
+        // grid colour
+        g.setColor(Color.red);
+        
+        // center lines
+        g.fillRect(vertLinePos,0,lineWidth, height);
+        g.fillRect(0, horiLinePos, width, lineWidth);
+        
+        vertLinePos = 449 - lineSpacing;
+        horiLinePos = 224 - lineSpacing;
+        
+        g.setColor(Color.gray);
+        // draw lines to the left of the center point
+        while ( vertLinePos > 0 ) {
+            
+            g.fillRect(vertLinePos,0,lineWidth, height);
+            vertLinePos -= lineSpacing;
+            
+        }
+        
+        vertLinePos = 449 + lineSpacing;
+        
+        // draw lines to the right of the center point
+        while ( vertLinePos < width ) {
+            
+            g.fillRect(vertLinePos,0,lineWidth, height);
+            vertLinePos += lineSpacing;
+            
+        }
+        
+        // draw lines above the center point
+        while ( horiLinePos > 0 ) {
+            
+            g.fillRect(0, horiLinePos, width, lineWidth);
+            horiLinePos -= lineSpacing;
+            
+        }
+        
+        horiLinePos = 224 + lineSpacing;
+        
+        // draw lines below the center point
+        while ( horiLinePos < width ) {
+            
+            g.fillRect(0, horiLinePos, width, lineWidth);
+            horiLinePos += lineSpacing;
+            
+        }
         
         
     }

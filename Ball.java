@@ -1,26 +1,36 @@
 import java.util.Random;
+import java.awt.*;
+import java.awt.geom.*;
 
 public class Ball {
     
-    private int pos_x;
-    private int pos_y;
+    private double pos_x;
+    private double pos_y;
     
-    private int size;
+    private double size;
     
-    private int speed_x;
-    private int speed_y;
+    private double speed_x;
+    private double speed_y;
     
     public Ball() {
         
-        pos_x = 445;
-        pos_y = 220;
+        pos_x = 445.0;
+        pos_y = 220.0;
         
-        size = 10;
+        size = 10.0;
         
-        speed_x = 5;
-        speed_y = 5;
+        speed_x = 5.0;
+        speed_y = 5.0;
         
         System.out.println("Ball created.");
+        
+    }
+    
+    public void drawBall(Graphics2D g) {
+        
+        Ellipse2D.Double b = new Ellipse2D.Double(pos_x, pos_y, size, size);
+        
+        g.fill(b);
         
     }
     
@@ -55,30 +65,30 @@ public class Ball {
         
         Random rand = new Random();
                 
-        pos_x = 445;
+        pos_x = 445.0;
         pos_y = rand.nextInt(400) + 25;
         
     }
     
-    public int getPosX() {
+    public double getPosX() {
         
         return pos_x;
         
     }
     
-    public int getPosY() {
+    public double getPosY() {
         
         return pos_y;
         
     }
     
-    public int getSize() {
+    public double getSize() {
         
         return size;
         
     }
 
-    public int getSpeedX() {
+    public double getSpeedX() {
         
         return speed_x;
         

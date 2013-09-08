@@ -20,7 +20,8 @@ public class GameEngine implements Runnable {
         
         private Ball b;
         
-        private Player p1;
+        //private Player p1;
+        private AI p1;
         //private Player p2;
         private AI p2;
 
@@ -58,6 +59,9 @@ public class GameEngine implements Runnable {
                         b.updatePos();
                         
                         //AI
+                        if (p1 != null) {
+                            p1.runAI(b.getPosX(), b.getPosY(), b.getSpeedX());
+                        }
                         if (p2 != null) {
                             p2.runAI(b.getPosX(), b.getPosY(), b.getSpeedX());
                         }
@@ -88,10 +92,10 @@ public class GameEngine implements Runnable {
         
         private void collisionDetect() {
             
-            int pos_x = b.getPosX();
-            int pos_y = b.getPosY();
+            double pos_x = b.getPosX();
+            double pos_y = b.getPosY();
             
-            if ( pos_x < -10 ) {
+            if ( pos_x < -10.0 ) {
                 
                 p2.incrementScore();
                 resetGame();              
@@ -99,7 +103,7 @@ public class GameEngine implements Runnable {
                 
             }
             
-            if ( pos_x > 900 ) {
+            if ( pos_x > 900.0 ) {
                 
                 p1.incrementScore();
                 resetGame();
@@ -108,11 +112,11 @@ public class GameEngine implements Runnable {
             }
             
             // detect collision with the top and bottom of the screen
-            if ( pos_y <= 0 ) b.invertSpeedY();
-            if ( pos_y >= 440 ) b.invertSpeedY();
+            if ( pos_y <= 0.0 ) b.invertSpeedY();
+            if ( pos_y >= 440.0 ) b.invertSpeedY();
             
             // detect collision with player 1 paddle
-            if ( pos_x >= p1.getPosX() -10 && pos_x <= p1.getPosX() + p1.getPadWidth()) {
+            if ( pos_x >= p1.getPosX() -10.0 && pos_x <= p1.getPosX() + p1.getPadWidth()) {
                 
                 if (pos_y >= p1.getPosY() && pos_y <= p1.getPosY() + p1.getPadHeight() ) {
                     
@@ -124,7 +128,7 @@ public class GameEngine implements Runnable {
             }
             
             // detect collision with player 2 paddle
-            if ( pos_x >= p2.getPosX() -10 && pos_x <= p2.getPosX() + p2.getPadWidth()) {
+            if ( pos_x >= p2.getPosX() -10.0 && pos_x <= p2.getPosX() + p2.getPadWidth()) {
                 
                 if (pos_y >= p2.getPosY() && pos_y <= p2.getPosY() + p2.getPadHeight() ) {
                     
@@ -156,17 +160,29 @@ public class GameEngine implements Runnable {
             
         }
         
-        public void setPlayer(Player p) {
+        public void setPlayer1(AI p) {
             
             p1 = p;
             
         }
 
-        public void setAIPlayer(AI p) {
+        public void setPlayer2(AI p) {
             
             p2 = p;
             
         }
+        
+        /*public void setPlayer1(Player p) {
+            
+            p1 = p;
+            
+        }
+
+        public void setPlayer2(Player p) {
+            
+            p2 = p;
+            
+        }*/
         
         public void resetGame(){
             
