@@ -3,6 +3,7 @@
  *      - Creates a seperate thread so the engine can run while the graphics are displayed and input taken. 
  */
 import java.util.Random;
+import java.util.ArrayList;
 import javax.swing.JComponent;
 
 public class GameEngine implements Runnable {
@@ -24,9 +25,13 @@ public class GameEngine implements Runnable {
         private AI p1;
         //private Player p2;
         private AI p2;
+        
+        private ArrayList gameObjects;
 
         // Default constructor
         public GameEngine() {
+            
+            gameObjects = new ArrayList();
             
             System.out.println("Engine Created.");
             
@@ -115,29 +120,24 @@ public class GameEngine implements Runnable {
             if ( pos_y <= 0.0 ) b.invertSpeedY();
             if ( pos_y >= 440.0 ) b.invertSpeedY();
             
-            // detect collision with player 1 paddle
-            if ( pos_x >= p1.getPosX() -10.0 && pos_x <= p1.getPosX() + p1.getPadWidth()) {
+            
+            //p1.detectCollision(b);
+            //p2.detectCollision(b);
+            
+            
+            // start the collision detection
+            for (int x = 0; x < gameObjects.size(); x++) {
                 
-                if (pos_y >= p1.getPosY() && pos_y <= p1.getPosY() + p1.getPadHeight() ) {
+                GameObject obj = (GameObject)gameObjects.get(x);
+                
+                if (obj.isSolid()) {
                     
-                    b.invertSpeedX();
-                    b.increaseSpeed();
-                
+                    obj.detectCollision(b);
+                    
                 }
                 
             }
             
-            // detect collision with player 2 paddle
-            if ( pos_x >= p2.getPosX() -10.0 && pos_x <= p2.getPosX() + p2.getPadWidth()) {
-                
-                if (pos_y >= p2.getPosY() && pos_y <= p2.getPosY() + p2.getPadHeight() ) {
-                    
-                    b.invertSpeedX();
-                    b.increaseSpeed();
-                
-                }
-                
-            }
             
         }
         
@@ -183,6 +183,12 @@ public class GameEngine implements Runnable {
             p2 = p;
             
         }*/
+        
+        public void addGameObject(Object o) {
+            
+            gameObjects.add(o);
+            
+        }
         
         public void resetGame(){
             

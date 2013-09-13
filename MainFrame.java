@@ -38,6 +38,10 @@ public class MainFrame extends JFrame implements KeyListener {
         
         e = engine;
         
+        e.addGameObject(p1);
+        e.addGameObject(p2);
+        e.addGameObject(ball);
+        
         // setup the Main Frame attributes
         setTitle(windowTitle);
         setSize(width, height);
@@ -89,7 +93,7 @@ public class MainFrame extends JFrame implements KeyListener {
             g.fillRect(0,0,width, height);
             
             // draw a debug grid over the background
-            debugGrid(g);
+            //debugGrid(g);
             
             // draw Player 1 paddle
             p1.drawPaddle(g);

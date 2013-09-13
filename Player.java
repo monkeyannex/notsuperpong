@@ -6,17 +6,12 @@
 import java.awt.*;
 import java.awt.geom.*;
 
-public class Player {
+public class Player extends GameObject {
     
     // Tracks the player number.  Used in place of a player name at this point. 
     //public static int playerNumber = 1;
     
-    // Tracks paddle attributes
-    //public int pos_x;
-    //public int pos_y;
-    //public int paddleWidth;
-    //public int paddleHeight;
-    
+    // Tracks paddle attributes    
     public double pos_x;
     public double pos_y;
     public double paddleWidth;
@@ -25,6 +20,8 @@ public class Player {
     public int playerID;
     
     public int score;
+    
+    private boolean solid;
     
     // Default player constructor
     public Player(int ID) {
@@ -49,10 +46,10 @@ public class Player {
         
         score = 0;
         
+        solid = true;
+        
         // Debug info.
         System.out.println("Created Player " + playerID + ".");
-        
-        //playerNumber++;
         
     }
     
@@ -69,7 +66,37 @@ public class Player {
     
     public void movePaddle(int dist) {
         
-        pos_y += dist;
+        // checks to see if the next paddle move will take it off the screen
+        // if it does, the paddle will just draw at the edge, no further.
+        
+        if (pos_y + dist <= 0) pos_y = 0;
+        else if (pos_y + dist >= 450 - paddleHeight) pos_y = 450 -paddleHeight;
+        else pos_y += dist;
+        
+    }
+    
+    public void detectCollision(Ball b) {
+        
+        if ( b.getPosX() >= pos_x - b.getSize() && b.getPosX() <= pos_x + paddleWidth ) {
+                
+            //if (b.getSpeedX() >= paddleWidth) {
+                
+                //for (int x = 0; x < b.getSpeedX(); x++) {
+                
+                    //b.updatePos(1);
+                
+                    if ( b.getPosY() >= pos_y && b.getPosY() <= pos_y + paddleHeight ) {
+                    
+                        b.invertSpeedX();
+                        b.increaseSpeed();
+                
+                    }
+                
+                //}
+                
+            //}
+                
+        }
         
     }
     
@@ -118,6 +145,13 @@ public class Player {
     public void setPosY(double newY) {
         
         pos_y = newY;
+        
+    }
+    
+    // checks to see if the ball will collide with it
+    public boolean isSolid() {
+        
+        return solid;
         
     }
     

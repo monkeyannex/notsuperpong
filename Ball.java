@@ -2,7 +2,7 @@ import java.util.Random;
 import java.awt.*;
 import java.awt.geom.*;
 
-public class Ball {
+public class Ball extends GameObject {
     
     private double pos_x;
     private double pos_y;
@@ -39,6 +39,13 @@ public class Ball {
         pos_x += speed_x;
         
         pos_y += speed_y;
+        
+    }
+    
+    public void updatePos(int n) {
+        
+        pos_x += n;
+        pos_y += n;
         
     }
     
@@ -94,7 +101,7 @@ public class Ball {
         
     }   
     
-     public void increaseSpeed() {
+    public void increaseSpeed() {
         
         if (speed_x > 0){
             speed_x++;
@@ -111,6 +118,15 @@ public class Ball {
         }    
     
         
-    }      
+    }
+    
+    // checks to see if the ball will collide with it
+    // wont need to collide with itself, so will always return false
+        
+    public void detectCollision() {
+        
+        System.out.println("Cannot detect collision, object cannot collide with itself.");
+        
+    }
     
 }
