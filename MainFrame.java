@@ -5,6 +5,7 @@
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.awt.geom.*;
 
 public class MainFrame extends JFrame implements KeyListener {
     
@@ -111,6 +112,17 @@ public class MainFrame extends JFrame implements KeyListener {
             
             // draw the ball
             ball.drawBall(g);
+            
+            //Debug for ball line
+            double x1 = ball.getPosX() + ball.getSize()/2;
+            double y1 = ball.getPosY() + ball.getSize()/2;
+            double x2 = x1 + ball.getSpeedX();// + ball.getSize()/2;
+            double y2 = y1 + ball.getSpeedY();// + ball.getSize()/2;   
+            Line2D.Double ballLine = new Line2D.Double();
+            ballLine.setLine(x1, y1, x2, y2);
+            g.setColor(Color.red);
+            g.draw(ballLine);
+            //end debug
             
         }
         

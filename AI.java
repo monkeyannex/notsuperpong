@@ -20,11 +20,11 @@ public class AI extends Player{
            
                 //If ball is above paddle, move up
                 if (ballPosY < pos_y + (paddleHeight/2) + 10){
-                    movePaddle(-6);
+                    movePaddle(-8);
                 }
                 //If ball is below paddle, move down
                 else if(ballPosY > pos_y + (paddleHeight/2) -10){
-                    movePaddle(6); 
+                    movePaddle(8); 
                 }
             }
        }
@@ -35,11 +35,11 @@ public class AI extends Player{
            
                 //If ball is above paddle, move up
                 if (ballPosY < pos_y + (paddleHeight/2) + 10){
-                    movePaddle(-6);
+                    movePaddle(-8);
                 }
                 //If ball is below paddle, move down
                 else if(ballPosY > pos_y + (paddleHeight/2) -10){
-                    movePaddle(6); 
+                    movePaddle(8); 
                 }
             }
        }

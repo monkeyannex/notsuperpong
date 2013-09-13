@@ -12,6 +12,8 @@ public class Ball extends GameObject {
     private double speed_x;
     private double speed_y;
     
+    Ellipse2D.Double b;
+    
     public Ball() {
         
         pos_x = 445.0;
@@ -22,13 +24,16 @@ public class Ball extends GameObject {
         speed_x = 5.0;
         speed_y = 5.0;
         
+        b = new Ellipse2D.Double(pos_x, pos_y, size, size);
+        
         System.out.println("Ball created.");
         
     }
     
     public void drawBall(Graphics2D g) {
         
-        Ellipse2D.Double b = new Ellipse2D.Double(pos_x, pos_y, size, size);
+        //Ellipse2D.Double b = new Ellipse2D.Double(pos_x, pos_y, size, size);
+        b.setFrame(pos_x, pos_y, size, size);
         
         g.fill(b);
         
@@ -42,7 +47,7 @@ public class Ball extends GameObject {
         
     }
     
-    public void updatePos(int n) {
+    public void updatePos(double n) {
         
         pos_x += n;
         pos_y += n;
@@ -100,7 +105,18 @@ public class Ball extends GameObject {
         return speed_x;
         
     }   
-    
+
+    public double getSpeedY() {
+        
+        return speed_y;
+        
+    }   
+
+    public Ellipse2D getBall() {
+        
+        return b;
+    }
+
     public void increaseSpeed() {
         
         if (speed_x > 0){

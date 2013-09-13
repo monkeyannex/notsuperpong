@@ -5,6 +5,8 @@
 import java.util.Random;
 import java.util.ArrayList;
 import javax.swing.JComponent;
+import java.awt.*;
+import java.awt.geom.*;
 
 public class GameEngine implements Runnable {
 
@@ -61,7 +63,7 @@ public class GameEngine implements Runnable {
                 
                         collisionDetect();
                     
-                        b.updatePos();
+                        //b.updatePos();
                         
                         //AI
                         if (p1 != null) {
@@ -124,21 +126,56 @@ public class GameEngine implements Runnable {
             //p1.detectCollision(b);
             //p2.detectCollision(b);
             
+            boolean hasCollided = false;
             
             // start the collision detection
             for (int x = 0; x < gameObjects.size(); x++) {
+                
+                double x1 = b.getPosX() + b.getSize()/2;
+                double y1 = b.getPosY() + b.getSize()/2;
+                
+                double correction = b.getSize()/2;
+                double x2 = x1 + b.getSpeedX();
+                double y2 = y1 + b.getSpeedY();
+                if (b.getSpeedX() < 0) {
+                    x2 -= correction;    
+                }
+                else{
+                    x2 += correction;
+                }
+
+                if (b.getSpeedY() < 0) {
+                    y2 -= correction;    
+                }
+                else{
+                    y2 += correction;
+                }
+                
+                //double x2 = x1 + b.getSpeedX();
+                //double y2 = y1 + b.getSpeedY();
+                
+                Line2D.Double ballLine = new Line2D.Double();
+                ballLine.setLine(x1, y1, x2, y2);
                 
                 GameObject obj = (GameObject)gameObjects.get(x);
                 
                 if (obj.isSolid()) {
                     
-                    obj.detectCollision(b);
-                    
+                    //if collision with ball/object would occur
+                    //move the ball inside the object
+                    //the new position is determined by the type of object it hits
+                    if (obj.detectCollision(b, ballLine)) {
+                        hasCollided = true;
+                        break;
+                        
+                    }
                 }
-                
             }
-            
-            
+            //move the ball if it doesnt collide
+            if (!hasCollided) {
+                b.updatePos();    
+            }
+  
         }
         
         public void togglePause() {

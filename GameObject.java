@@ -1,3 +1,6 @@
+import java.awt.*;
+import java.awt.geom.*;
+
 public class GameObject {
     
     private static String TYPE = "Empty";
@@ -9,10 +12,10 @@ public class GameObject {
         
     }
     
-    public void detectCollision(Ball b) {
+    public boolean detectCollision(Ball b, Line2D.Double l) {
         
         System.out.println("Cannot detect collision, object is empty.");
-        
+        return false;
     }
     
     public String getType() {
