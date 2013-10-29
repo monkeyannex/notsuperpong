@@ -1,10 +1,13 @@
 public class AI extends Player{
     
     public double reactionTH;
+    public double paddleSpeed;
     
-    public AI(int ID) {
+    public AI(int ID, int pID) {
         
-        super(ID);
+        super(ID, pID);
+        
+        paddleSpeed = 10;
         
         reactionTH = 450;
         
@@ -20,11 +23,11 @@ public class AI extends Player{
            
                 //If ball is above paddle, move up
                 if (ballPosY < pos_y + (paddleHeight/2) + 10){
-                    movePaddle(-8);
+                    movePaddle(-paddleSpeed);
                 }
                 //If ball is below paddle, move down
                 else if(ballPosY > pos_y + (paddleHeight/2) -10){
-                    movePaddle(8); 
+                    movePaddle(paddleSpeed); 
                 }
             }
        }
@@ -35,11 +38,11 @@ public class AI extends Player{
            
                 //If ball is above paddle, move up
                 if (ballPosY < pos_y + (paddleHeight/2) + 10){
-                    movePaddle(-8);
+                    movePaddle(-paddleSpeed);
                 }
                 //If ball is below paddle, move down
                 else if(ballPosY > pos_y + (paddleHeight/2) -10){
-                    movePaddle(8); 
+                    movePaddle(paddleSpeed); 
                 }
             }
        }

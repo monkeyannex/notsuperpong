@@ -14,6 +14,8 @@ public class Player extends GameObject {
     // Tracks paddle attributes    
     public double pos_x;
     public double pos_y;
+    public double pos_x1;
+    public double pos_y1;
     public double paddleWidth;
     public double paddleHeight;
     
@@ -21,14 +23,17 @@ public class Player extends GameObject {
     
     public int score;
     
-    private boolean solid;
-    
-    Rectangle2D.Double paddle;    
+    private Rectangle2D.Double paddle;    
     
     // Default player constructor
-    public Player(int ID) {
+    public Player(int ID,int pID) {
         
-        playerID = ID;
+        TYPE = "PADDLE";
+        
+        playerID = pID;
+        
+        OID = ID;
+        NAME = "Player " + playerID;
         
         if (playerID == 1) {
             
@@ -46,20 +51,24 @@ public class Player extends GameObject {
         paddleWidth = 20.0;
         paddleHeight = 100.0;
         
+        pos_x1 = pos_x + paddleWidth;
+        pos_y1 = pos_y + paddleHeight;
+        
         score = 0;
         
         paddle = new Rectangle2D.Double(pos_x, pos_y, paddleWidth, paddleHeight);
         
-        solid = true;
+        VISIBLE = true;
+        SOLID = true;
         
         // Debug info.
         System.out.println("Created Player " + playerID + ".");
         
     }
     
-    public void drawPaddle(Graphics2D g) {
+    public void draw(Graphics2D g, MainFrame f, Canvas c) {
         
-        if (playerID == 1) g.setColor(Color.blue);
+        if (playerID == 1) g.setColor(Color.orange);
         else if (playerID == 2) g.setColor(Color.green);
         
         //Rectangle2D.Double paddle = new Rectangle2D.Double(pos_x, pos_y, paddleWidth, paddleHeight);
@@ -69,7 +78,7 @@ public class Player extends GameObject {
         
     }
     
-    public void movePaddle(int dist) {
+    public void movePaddle(double dist) {
         
         // checks to see if the next paddle move will take it off the screen
         // if it does, the paddle will just draw at the edge, no further.
@@ -80,88 +89,24 @@ public class Player extends GameObject {
         
     }
     
-    public boolean detectCollision(Ball b, Line2D.Double l) {
-           
-        if (l.intersects(paddle)) {
-           
-            //b.invertSpeedX();
-            //b.increaseSpeed();
-            //b.updatePos();
+    public boolean detectCollision(Ball b) {
+        
+        double bx = b.getPosX();
+        double by = b.getPosY();
+        
+        if(by >= pos_y && by <= pos_y1) {
             
-            //Move the ball to touch the paddle
-            //Then move it the remaining amount in the distance tick
-            
-            //If the ball is to the left of the paddle
-            if (b.getPosX() < pos_x) {
+            if(bx >= pos_x && bx <= pos_x1) {
                 
-                //Get x distance to the paddle - taking off the paddle size so it doesnt go inside
-                //double xToPad = pos_x - b.getPosX() - b.getSize()/2;
-                double xToPad = pos_x - b.getPosX() - b.getSize();
-                //Get remaing distance to travel after collision
-                double xFromPad = b.getSpeedX() - xToPad - b.getSize(); 
+                b.invertSpeedX();
                 
-                //If its above and left of the paddle
-                if(b.getPosY() < pos_y) {
-                    //Move the ball next to the paddle
-                    b.updatePos(xToPad);
-                    b.invertSpeedY();
-                }
-                //If its below and left of the paddle
-                else if(b.getPosY() > pos_y + paddleHeight) {
-                    //Move the ball next to the paddle
-                    b.updatePos(xToPad);
-                    b.invertSpeedY();
-                }
-                //Its to the left but next to the paddle
-                else {
-                    //Move the ball next to the paddle
-                    
-                    //NOTE THIS SEEMS TO BE WORKING.... NEED TO DO THE TOP/BOTTOM and THE LEFT HAND PADDLE
-                    System.out.println("ball speed: " + b.getSpeedX());
-                    System.out.println("xToPad: " + xToPad);
-                    b.updatePos(xToPad);
-                    b.invertSpeedX();
-                    //Move the remainder of the distance in the tick
-                    b.updatePos(xFromPad);
-                    System.out.println("its to the left of the paddle");
-                }
-            }
-            //If the ball is to the right of the paddle
-            else if(b.getPosX() > pos_x + paddleWidth) {
+                return true;
                 
-                //Get x distance to the paddle - taking off the paddle size so it doesnt go inside
-                double xToPad = b.getPosX() - (pos_x + paddleWidth);
-                //Get remaing distance to travel after collision
-                double xFromPad = b.getSpeedX() - xToPad;                
-                
-                
-                //If its above and right of the paddle
-                if(b.getPosY() < pos_y) {
-                    b.invertSpeedY();
-                }
-                //If its below and right of the paddle
-                else if(b.getPosY() > pos_y + paddleHeight) {
-                    b.invertSpeedY();
-                }
-                //Its to the right but next to the paddle
-                else {
-                    //Move the ball next to the paddle
-                    System.out.println("ball speed: " + b.getSpeedX());
-                    System.out.println("xToPad: " + xToPad);
-                    b.updatePos(xToPad);
-                    b.invertSpeedX();
-                    //Move the remainder of the distance in the tick
-                    b.updatePos(xFromPad);
-                    System.out.println("its to the left of the paddle");
-                }    
             }
             
-            //Increase the speed of the ball
-            b.increaseSpeed();
-            return true;
-            
-        }  
-        return false; 
+        }
+        
+        return false;
 
     }
     
@@ -215,13 +160,6 @@ public class Player extends GameObject {
     public void setPosY(double newY) {
         
         pos_y = newY;
-        
-    }
-    
-    // checks to see if the ball will collide with it
-    public boolean isSolid() {
-        
-        return solid;
         
     }
     

@@ -8,49 +8,59 @@ public class Ball extends GameObject {
     private double pos_y;
     
     private double size;
-    
+
+    private double defaultSpeed = 5.0;
     private double speed_x;
     private double speed_y;
     
     Ellipse2D.Double b;
     
-    public Ball() {
+    public Ball(int ID) {
+        
+        OID = ID;
+        NAME = "Ball";
+        TYPE = "BALL";
         
         pos_x = 445.0;
         pos_y = 220.0;
         
         size = 10.0;
         
-        speed_x = 5.0;
-        speed_y = 5.0;
+        speed_x = defaultSpeed;
+        speed_y = defaultSpeed;
         
         b = new Ellipse2D.Double(pos_x, pos_y, size, size);
         
         System.out.println("Ball created.");
         
+        VISIBLE = true;
+        SOLID = true;
+        
     }
     
-    public void drawBall(Graphics2D g) {
+    public void draw(Graphics2D g, MainFrame f, Canvas c) {
         
         //Ellipse2D.Double b = new Ellipse2D.Double(pos_x, pos_y, size, size);
         b.setFrame(pos_x, pos_y, size, size);
         
+        g.setColor(Color.white);
         g.fill(b);
         
     }
     
     public void updatePos() {
         
-        pos_x += speed_x;
-        
+        pos_x += speed_x;        
         pos_y += speed_y;
         
     }
     
     public void updatePos(double n) {
         
-        pos_x += n;
-        pos_y += n;
+        if (speed_x < 0) pos_x += -n;
+        else pos_x += n;
+        if (speed_y < 0) pos_y += -n;
+        else pos_y += n;
         
     }
     
@@ -73,6 +83,13 @@ public class Ball extends GameObject {
         
     }
     
+    public void resetSpeed() {
+        
+        speed_x = defaultSpeed;
+        speed_y = defaultSpeed;
+        
+    }
+    
     public void resetPos() {
         
         Random rand = new Random();
@@ -84,13 +101,13 @@ public class Ball extends GameObject {
     
     public double getPosX() {
         
-        return pos_x;
+        return pos_x + (size / 2);
         
     }
     
     public double getPosY() {
         
-        return pos_y;
+        return pos_y + (size / 2);
         
     }
     
@@ -110,11 +127,26 @@ public class Ball extends GameObject {
         
         return speed_y;
         
-    }   
+    }
+    
+    public boolean doesIntersect(Rectangle2D.Double r) {
+                
+        if (b.intersects(r)) {
+            
+            System.out.println("Does intersect");
+            return true;
+            
+        }
+        
+        System.out.println("Doesnt intesect");
+        return false;
+        
+    } 
 
-    public Ellipse2D getBall() {
+    public Ellipse2D.Double getBall() {
         
         return b;
+        
     }
 
     public void increaseSpeed() {
@@ -139,9 +171,10 @@ public class Ball extends GameObject {
     // checks to see if the ball will collide with it
     // wont need to collide with itself, so will always return false
         
-    public void detectCollision() {
+    public boolean detectCollision(Ball b) {
         
-        System.out.println("Cannot detect collision, object cannot collide with itself.");
+        System.out.println(NAME + ": Cannot detect collision, object cannot collide with itself.");
+        return false;
         
     }
     
