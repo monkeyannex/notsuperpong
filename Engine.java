@@ -220,7 +220,6 @@ public class Engine implements Runnable {
             
             TIMER = 0.0;
             
-            //addObject(new MonkeyScreen(nextOID(), splash1_length, this));
             addObject(new MonkeyScreen(nextOID(), splash1_length, this));
             splash1 = (GameObject)objects.get(getObjectIndex("Monkey Annex Start Screen"));
             addObject(new ScreenFade(nextOID(), 0.25, this, true, 0));
@@ -322,10 +321,10 @@ public class Engine implements Runnable {
                         
             //AI
             if (ai1 != null) {
-                //ai1.runAI(b.getPosX(), b.getPosY(), b.getSpeedX());
+                ai1.runAI(b.getPosX(), b.getPosY(), b.getSpeedX());
             }
             if (ai2 != null) {
-                //ai2.runAI(b.getPosX(), b.getPosY(), b.getSpeedX());
+                ai2.runAI(b.getPosX(), b.getPosY(), b.getSpeedX());
             }
                                            
         }

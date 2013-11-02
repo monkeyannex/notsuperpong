@@ -8,7 +8,7 @@ import java.awt.geom.*;
 public class MainFrame extends JFrame implements KeyListener {
     
     private static String TITLE = "NOTSUPERPONG";
-    private static String VERSION = "0.2.0";
+    private static String VERSION = "0.2.1";
 
     private static int WIDTH = 900;
     private static int HEIGHT = 450;
