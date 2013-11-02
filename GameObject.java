@@ -11,6 +11,8 @@ public class GameObject {
     public boolean VISIBLE = false;
     public boolean SOLID = false;
     
+    public Canvas c;
+    
     public boolean isSolid() {
         
         if(SOLID) return true;

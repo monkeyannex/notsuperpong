@@ -3,18 +3,23 @@ public class AI extends Player{
     public double reactionTH;
     public double paddleSpeed;
     
-    public AI(int ID, int pID) {
+    public AI(int ID, int pID, Canvas canvas) {
         
-        super(ID, pID);
+        super(ID, pID, canvas);
+        
+        c = canvas;
         
         paddleSpeed = 10;
         
-        reactionTH = 450;
+        // only react when its in its own half of the screen
+        reactionTH = c.getWidth() / 2;
         
     }
     
     
     public void runAI(double ballPosX, double ballPosY, double ballSpeedX){
+       
+       reactionTH = c.getWidth() / 2;
        
        if (playerID == 1) {
        

@@ -10,6 +10,7 @@ public class ScreenFade extends GameObject{
 
     // sets how long the fade should go for
     private double length;
+    private double delay;
     private double timer;
     
     private float alpha;
@@ -17,7 +18,7 @@ public class ScreenFade extends GameObject{
     // stores fade direction.  true == fade in, false == fade out
     private boolean fadein;
 
-    public ScreenFade(int objectID, double l, Engine engine, boolean fi) {
+    public ScreenFade(int objectID, double l, Engine engine, boolean fi, double d) {
     
         e = engine;
         
@@ -26,6 +27,7 @@ public class ScreenFade extends GameObject{
     
         OID = objectID;
         length = l;
+        delay = d;
         
         fadein = fi;
         
@@ -49,7 +51,7 @@ public class ScreenFade extends GameObject{
         timer += UPDATE_TIME;
         
         // once th fade has completed remove it from the object list
-        if(timer >= length) {
+        if(timer >= length + delay) {
             
             // Debug
             System.out.println("FADE REMOVED");
@@ -59,20 +61,24 @@ public class ScreenFade extends GameObject{
         }
         else {
         
-            fade.setRect(0,0,c.getWidth(),c.getHeight());
+            if(timer >= delay) {
+                
+                fade.setRect(0,0,c.getWidth(),c.getHeight());
             
-            double percent = UPDATE_TIME / length;
+                double percent = UPDATE_TIME / length;
             
-            if(fadein) alpha -= (float)percent;
-            else alpha += (float)percent;
+                if(fadein) alpha -= (float)percent;
+                else alpha += (float)percent;
             
-            if(alpha > 1) alpha = 1;
-            if(alpha < 0) alpha = 0;
+                if(alpha > 1) alpha = 1;
+                if(alpha < 0) alpha = 0;
             
-            Color blackFade = new Color(0,0,0,alpha);
+                Color blackFade = new Color(0,0,0,alpha);
         
-            g.setColor(blackFade);
-            g.fill(fade);
+                g.setColor(blackFade);
+                g.fill(fade);
+                
+            }
             
         }
         

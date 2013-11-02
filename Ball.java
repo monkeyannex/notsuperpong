@@ -8,23 +8,26 @@ public class Ball extends GameObject {
     private double pos_y;
     
     private double size;
+    private double sizeScale = 1.25;
 
-    private double defaultSpeed = 5.0;
+    // speed of the board is measured in a percent of the screen travelled every cycle
+    private double defaultSpeed = 0.55;
+    private double speedIncrement = 0.05;
     private double speed_x;
     private double speed_y;
     
     Ellipse2D.Double b;
     
-    public Ball(int ID) {
+    public Ball(int ID, Canvas c) {
         
         OID = ID;
         NAME = "Ball";
         TYPE = "BALL";
         
-        pos_x = 445.0;
-        pos_y = 220.0;
+        pos_x = c.getWidth() / 2;
+        pos_y = c.getHeight() / 2;
         
-        size = 10.0;
+        size = (c.getWidth() / 100.0) * sizeScale;
         
         speed_x = defaultSpeed;
         speed_y = defaultSpeed;
@@ -40,6 +43,9 @@ public class Ball extends GameObject {
     
     public void draw(Graphics2D g, MainFrame f, Canvas c) {
         
+        // set the size of the ball
+        size = (c.getWidth() / 100.0) * sizeScale;
+        
         //Ellipse2D.Double b = new Ellipse2D.Double(pos_x, pos_y, size, size);
         b.setFrame(pos_x, pos_y, size, size);
         
@@ -48,10 +54,10 @@ public class Ball extends GameObject {
         
     }
     
-    public void updatePos() {
+    public void updatePos(Canvas c) {
         
-        pos_x += speed_x;        
-        pos_y += speed_y;
+        pos_x += (c.getWidth() / 100.0) * speed_x;
+        pos_y += (c.getWidth() / 100.0) * speed_y;
         
     }
     
@@ -90,12 +96,17 @@ public class Ball extends GameObject {
         
     }
     
-    public void resetPos() {
+    public void resetPos(Canvas c) {
         
         Random rand = new Random();
-                
-        pos_x = 445.0;
-        pos_y = rand.nextInt(400) + 25;
+        
+        // stop the bal from spawning in a section at the top and bottom of the screen
+        // it will spawn randomly in a section in the middle
+        int noSpawnZone = (c.getHeight() / 100) * 10;
+        
+        pos_x = c.getWidth() / 2.0;
+        // set the spawn zone to some
+        pos_y = rand.nextInt(c.getHeight() - (noSpawnZone * 2)) + noSpawnZone;
         
     }
     
@@ -152,17 +163,17 @@ public class Ball extends GameObject {
     public void increaseSpeed() {
         
         if (speed_x > 0){
-            speed_x++;
+            speed_x += speedIncrement;
         }
         else{
-            speed_x--;
+            speed_x -= speedIncrement;
         }
     
         if (speed_y > 0){
-            speed_y++;
+            speed_y += speedIncrement;
         }
         else{
-            speed_y--;
+            speed_y -= speedIncrement;
         }    
     
         
@@ -173,7 +184,8 @@ public class Ball extends GameObject {
         
     public boolean detectCollision(Ball b) {
         
-        System.out.println(NAME + ": Cannot detect collision, object cannot collide with itself.");
+        // Debug
+        //System.out.println(NAME + ": Cannot detect collision, object cannot collide with itself.");
         return false;
         
     }

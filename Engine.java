@@ -223,7 +223,8 @@ public class Engine implements Runnable {
             //addObject(new MonkeyScreen(nextOID(), splash1_length, this));
             addObject(new MonkeyScreen(nextOID(), splash1_length, this));
             splash1 = (GameObject)objects.get(getObjectIndex("Monkey Annex Start Screen"));
-            addObject(new ScreenFade(nextOID(), 0.25, this, true));
+            addObject(new ScreenFade(nextOID(), 0.25, this, true, 0));
+            addObject(new ScreenFade(nextOID(), 0.25, this, false, 3.75));
             
             FIRST_RUN = false;
             
@@ -279,7 +280,7 @@ public class Engine implements Runnable {
             
             if(!mainmenu.VISIBLE) mainmenu.setVisable(true);
             
-            addObject(new ScreenFade(nextOID(), 0.25, this, true));
+            addObject(new ScreenFade(nextOID(), 0.25, this, true, 0));
             
         }
         //
@@ -300,12 +301,12 @@ public class Engine implements Runnable {
             
             TIMER = 0.0;
             
-            objects.add(new Ball(nextOID()));
-            b = (Ball)objects.get(getObjectIndex("Ball"));
-            objects.add(new AI(nextOID(), 1));
+            objects.add(new AI(nextOID(), 1, c));
             ai1 = (AI)objects.get(getObjectIndex("Player 1"));
-            objects.add(new AI(nextOID(), 2));
+            objects.add(new AI(nextOID(), 2, c));
             ai2 = (AI)objects.get(getObjectIndex("Player 2"));
+            objects.add(new Ball(nextOID(), c));
+            b = (Ball)objects.get(getObjectIndex("Ball"));
             
             FIRST_RUN = false;
             
@@ -321,10 +322,10 @@ public class Engine implements Runnable {
                         
             //AI
             if (ai1 != null) {
-                ai1.runAI(b.getPosX(), b.getPosY(), b.getSpeedX());
+                //ai1.runAI(b.getPosX(), b.getPosY(), b.getSpeedX());
             }
             if (ai2 != null) {
-                ai2.runAI(b.getPosX(), b.getPosY(), b.getSpeedX());
+                //ai2.runAI(b.getPosX(), b.getPosY(), b.getSpeedX());
             }
                                            
         }
@@ -339,7 +340,7 @@ public class Engine implements Runnable {
             double pos_x = b.getPosX();
             double pos_y = b.getPosY();
             
-            if ( pos_x < -10.0 ) {
+            if ( pos_x <= - b.getSize() - 10.0 ) {
                 
                 ai2.incrementScore();
                 resetGame();              
@@ -347,7 +348,7 @@ public class Engine implements Runnable {
                 
             }
             
-            if ( pos_x > 900.0 ) {
+            if ( pos_x >= c.getWidth() + b.getSize() + 10.0 ) {
                 
                 ai1.incrementScore();
                 resetGame();
@@ -356,8 +357,8 @@ public class Engine implements Runnable {
             }
             
             // detect collision with the top and bottom of the screen
-            if ( pos_y <= 0.0 ) b.invertSpeedY();
-            if ( pos_y >= 440.0 ) b.invertSpeedY();
+            if ( pos_y <= 0 ) b.invertSpeedY();
+            if ( pos_y >= c.getHeight() ) b.invertSpeedY();
             
             
             //p1.detectCollision(b);
@@ -381,7 +382,7 @@ public class Engine implements Runnable {
             //move the ball if it doesnt collide
             
             
-            b.updatePos();
+            b.updatePos(c);
   
         }
     
@@ -390,7 +391,7 @@ public class Engine implements Runnable {
             //Define random x/y variables
             Random rand = new Random();
                         
-            b.resetPos();
+            b.resetPos(c);
             b.resetSpeed();
             
             if(rand.nextInt(2) == 1){
@@ -401,8 +402,8 @@ public class Engine implements Runnable {
                 b.invertSpeedY();
             }
             
-            ai1.setPosY(175);
-            ai2.setPosY(175);
+            ai1.resetPaddle(c);
+            ai2.resetPaddle(c);
             
         }
     
