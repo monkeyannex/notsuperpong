@@ -31,6 +31,12 @@ public class Player extends GameObject {
     
     private Rectangle2D.Double paddle;    
     
+    //create the hitbox lines
+    private Line2D.Double hitboxLEFT = new Line2D.Double();; 
+    private Line2D.Double hitboxRIGHT = new Line2D.Double();;
+    private Line2D.Double hitboxTOP = new Line2D.Double();;
+    private Line2D.Double hitboxBOTTOM = new Line2D.Double();; 
+    
     // Default player constructor
     public Player(int ID,int pID, Canvas canvas) {
         
@@ -106,7 +112,7 @@ public class Player extends GameObject {
         paddle.setFrame(pos_x, pos_y, paddleWidth, paddleHeight);
         
         g.fill(paddle);
-        
+               
     }
     
     public void movePaddle(double dist) {
@@ -122,29 +128,81 @@ public class Player extends GameObject {
     
     public boolean detectCollision(Ball b) {
         
-        double bx = b.getPosX();
-        double by = b.getPosY();
+        //Hitbox collision detection
+        hitboxLEFT.setLine(pos_x, pos_y, pos_x, pos_y+paddleHeight);
+        hitboxRIGHT.setLine(pos_x+paddleWidth, pos_y, pos_x+paddleWidth, pos_y+paddleHeight);
+        hitboxTOP.setLine(pos_x, pos_y, pos_x+paddleWidth, pos_y);
+        hitboxBOTTOM.setLine(pos_x, pos_y+paddleHeight, pos_x+paddleWidth, pos_y+paddleHeight);
+        //Get the line between the ball and where the ball would go in a tick to collide with
+        Line2D.Double ballCollisionLine = b.getBallCollisionLine();
         
-        pos_x1 = pos_x + paddleWidth;
-        pos_y1 = pos_y + paddleHeight;
-        
-        if(by >= pos_y && by <= pos_y1) {
-            
-            if(bx >= pos_x && bx <= pos_x1) {
-                
-                b.invertSpeedX();
-                b.increaseSpeed();
-                
-                return true;
-                
-            }
-            
+        //Only detect if the ball collides with the left hand side if its going right
+        if (ballCollisionLine.intersectsLine(hitboxLEFT) && b.getSpeedX() > 0){
+            System.out.println("Hit the left hand side of the paddle");
+            //X Distance to Paddle from the top left position of the ball
+            double xDistToPad = pos_x - b.getPosX();
+            //X Distance remaining after hitting the paddle due to its speed
+            double xDistAfterPad = (c.getWidth() / 100.0)*b.getSpeedX() - xDistToPad;
+            //Update the position of the ball to be next to the paddle
+            b.updatePos(xDistToPad);
+            //change the balls X direction
+            b.invertSpeedX();
+            //Move the ball the remaining distance           
+            b.updatePos(xDistAfterPad);
+            b.increaseSpeed();
+            return true;
         }
-        
+        //Only detect if the ball collides with the right hand side if its going left
+        else if (ballCollisionLine.intersectsLine(hitboxRIGHT) && b.getSpeedX() < 0) {
+            System.out.println("Hit the right hand side of the paddle");
+            //X Distance to Paddle from the top left of the ball to the RHS of the paddle
+            double xDistToPad = (pos_x + paddleWidth) - b.getRealPosX();
+            //X Distance remaining after hitting the paddle due to its speed
+            double xDistAfterPad = (c.getWidth() / 100.0)*b.getSpeedX() - xDistToPad;
+            //Update the position of the ball to be next to the paddle
+            b.updatePos(xDistToPad);
+            //change the balls X direction
+            b.invertSpeedX();
+            //Move the ball the remaining distance
+            b.updatePos(xDistAfterPad);
+            b.increaseSpeed();
+            return true;
+        }
+        else if (ballCollisionLine.intersectsLine(hitboxTOP)) {
+            System.out.println("Hit the top of the paddle");
+            //Y Distance to Paddle from the top left position of the ball
+            double yDistToPad = pos_y - b.getPosY();
+            //X Distance remaining after hitting the paddle due to its speed
+            double yDistAfterPad = (c.getHeight() / 100.0)*b.getSpeedY() - yDistToPad;
+            //Update the position of the ball to be next to the paddle
+            b.updatePos(yDistToPad);
+            //change the balls Y direction
+            b.invertSpeedY();
+            //Move the ball the remaining distance           
+            b.updatePos(yDistAfterPad);
+            b.increaseSpeed();
+            return true;
+        }
+        else if (ballCollisionLine.intersectsLine(hitboxBOTTOM)) {
+            System.out.println("Hit the bottom of the paddle");
+            //Y Distance to Paddle from the top left of the ball to the RHS of the paddle
+            double yDistToPad = (pos_y + paddleHeight) - b.getRealPosY();
+            //Y Distance remaining after hitting the paddle due to its speed
+            double yDistAfterPad = (c.getHeight() / 100.0)*b.getSpeedY() - yDistToPad;
+            //Update the position of the ball to be next to the paddle
+            b.updatePos(yDistToPad);
+            //change the balls Y direction
+            b.invertSpeedY();
+            //Move the ball the remaining distance           
+            b.updatePos(yDistAfterPad);
+            b.increaseSpeed();
+            return true;
+        }
+        //There was no collision
         return false;
 
     }
-    
+        
     private void calcPos(Canvas c) {
         
         // calculate the correct dimensions of the paddle based on the size of the screen

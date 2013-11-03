@@ -181,7 +181,7 @@ public class Engine implements Runnable {
             else System.out.println("Cannot repaint screen; Canvas not started.");
             
             // Debug
-            System.out.println("Game Objects: " + objects.size());
+            //System.out.println("Game Objects: " + objects.size());
             
             //RUNNING_TIME = System.nanoTime() - START_TIME;
             
@@ -365,6 +365,9 @@ public class Engine implements Runnable {
             
             boolean hasCollided = false;
             
+            //update the collision line of the ball
+            b.createBallCollisionLine(c);
+            
             // start the collision detection
             for (int x = 0; x < objects.size(); x++) {
                 
@@ -379,8 +382,6 @@ public class Engine implements Runnable {
                 }
             }
             //move the ball if it doesnt collide
-            
-            
             b.updatePos(c);
   
         }
