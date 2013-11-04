@@ -220,6 +220,7 @@ public class Engine implements Runnable {
         //GameObject fadein1 = null;
         
         double splash1_length = 4.0;
+        double splash1_fade_length = 0.25;
         
         if(FIRST_RUN && TIMER >= 1.0) {
             
@@ -227,8 +228,8 @@ public class Engine implements Runnable {
             
             addObject(new MonkeyScreen(nextOID(), splash1_length, this));
             splash1 = (GameObject)objects.get(getObjectIndex("Monkey Annex Start Screen"));
-            addObject(new ScreenFade(nextOID(), 0.25, this, true, 0));
-            addObject(new ScreenFade(nextOID(), 0.25, this, false, 3.75));
+            addObject(new ScreenFade(nextOID(), splash1_fade_length, this, true, 0));
+            addObject(new ScreenFade(nextOID(), splash1_fade_length, this, false, splash1_length - splash1_fade_length));
             
             FIRST_RUN = false;
             
@@ -275,7 +276,7 @@ public class Engine implements Runnable {
             
             TIMER = 0.0;
             
-            Menu temp1 = new Menu(nextOID());
+            Menu temp1 = new Menu(nextOID(), this);
             addObject(temp1);
             mainmenu = temp1;
             menuOID = mainmenu.getOID();
@@ -388,7 +389,7 @@ public class Engine implements Runnable {
                     
                     if(hasCollided) {
                         
-                        se.play("boop");
+                        se.play("paddle_hit");
                         break;
                         
                     } 
@@ -463,7 +464,7 @@ public class Engine implements Runnable {
             
             if(PREV_PHASE == 100) {
                 
-                objects.add(new Menu(nextOID()));
+                objects.add(new Menu(nextOID(), this));
                 
             }
             
@@ -567,6 +568,12 @@ public class Engine implements Runnable {
         
     }
     
+    public int getPhaseNumber() {
+        
+        return PHASE;
+        
+    }
+    
     public void keyPress(int key) {
         
         // Global controls
@@ -589,16 +596,23 @@ public class Engine implements Runnable {
                 // 'DOWN'
                 case 38:
                     m.prevMenuOpt();
+                    se.play("menu_blip");
                     break;
             
                 // 'UP'    
                 case 40:
                     m.nextMenuOpt();
+                    se.play("menu_blip");
                     break;
  
                 // 'ENTER'    
                 case 10:
-                    if(m.getSelected().equals("Exit"))System.exit(0);
+                    if(m.getSelected().equals("Exit")) {
+                        
+                        se.play("select");
+                        System.exit(0);
+                        
+                    }
                     else if(m.getSelected().equals("New Game")) {
                         
                         removeObject(getObjectIndex(m.getOID()));
@@ -608,7 +622,12 @@ public class Engine implements Runnable {
                     }
                     else if(m.getSelected().equals("Continue")) {
                         
-                        if(PHASE == 0) togglePause();
+                        if(PHASE == 0) {
+                            
+                            togglePause();
+                            se.play("select");
+                            
+                        }
                         
                     }
                     break;

@@ -13,19 +13,26 @@ public class Menu extends GameObject{
     private int selected;
     
     private ArrayList m_items;
+    private ArrayList new_sub_items;
+    private ArrayList options_sub_items;
     
     private String opt_cont = "Continue";
     private String opt_newgame = "New Game";
     private String opt_options = "Options";
+    private String opt_options_emily = "  // No options yet Emily";
     private String opt_exit = "Exit";
     
     Rectangle2D.Double background;
+    
+    private Engine e;
 
-    public Menu(int objectID) {
+    public Menu(int objectID, Engine engine) {
         
         OID = objectID;
         TYPE = "MENU";
         NAME = "Main Menu";
+        
+        e = engine;
         
         title = "!SUPER-PONG";
         
@@ -33,12 +40,23 @@ public class Menu extends GameObject{
         
         background = new Rectangle2D.Double(0,0,0,0);
         
+        // Set up the different menus/sub-menus
         m_items = new ArrayList();
         
-        m_items.add(opt_cont);
+        
+        // Main menu options
+        // Only show 'continue' if in game
+        if(e.getPhaseNumber() == 0) m_items.add(opt_cont);
+        // Add the standard stuff
         m_items.add(opt_newgame);
         m_items.add(opt_options);
+        //m_items.add(opt_options_emily);
         m_items.add(opt_exit);
+        
+        // New Game sub menu options
+        
+        
+        
         
         VISIBLE = true;
         
@@ -78,13 +96,15 @@ public class Menu extends GameObject{
         
         for(int o = 0; o < m_items.size(); o ++ ) {
             
+            String item = (String)m_items.get(o);
+            
             y += spacing;
             
             if(o == selected) {
                 
                 g.setColor(Color.white);
                 g.setFont(new Font("default", Font.BOLD, 20));
-                
+                                
             }
             else {
                 
@@ -93,9 +113,17 @@ public class Menu extends GameObject{
                 
             }
             
-            String item = (String)m_items.get(o);
-            
             g.drawString(item, x , y);
+            
+            // Show sub menu options
+            if(o == selected && item.equals("Options")) {
+                
+                y += spacing;
+                g.setColor(Color.gray);
+                g.setFont(new Font("default", Font.BOLD, 16));
+                g.drawString(opt_options_emily, x , y);
+                
+            }
             
         }
         

@@ -17,6 +17,8 @@ public class SoundEngine {
     
     private AudioFile SELECT;
     private AudioFile BOOP;
+    private AudioFile PADDLE_HIT;
+    private AudioFile MENU_BLIP;
 
     public SoundEngine() {
         
@@ -26,6 +28,8 @@ public class SoundEngine {
         // Initialise all the sounds needed to play
         SELECT = new AudioFile(FOLDER + "select.wav");
         BOOP = new AudioFile(FOLDER + "boop.wav");
+        PADDLE_HIT = new AudioFile(FOLDER + "paddle_hit.wav");
+        MENU_BLIP = new AudioFile(FOLDER + "menu_blip.wav");
     
     }
     
@@ -57,6 +61,8 @@ public class SoundEngine {
         
                 if(toPlay.equals("select")) SELECT.play(new ByteArrayInputStream(SELECT.getSamples()));
                 else if(toPlay.equals("boop")) BOOP.play(new ByteArrayInputStream(BOOP.getSamples()));
+                else if(toPlay.equals("paddle_hit")) PADDLE_HIT.play(new ByteArrayInputStream(PADDLE_HIT.getSamples()));
+                else if(toPlay.equals("menu_blip")) MENU_BLIP.play(new ByteArrayInputStream(MENU_BLIP.getSamples()));
         
                 return null;
         
