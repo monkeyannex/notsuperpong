@@ -79,13 +79,17 @@ public class Engine implements Runnable {
         
         objects = new ArrayList();
         // Debug
-        System.out.println("Initialising ArrayList(objects).");
+        System.out.println("Initialised ArrayList(objects).");
         
         fps = new ArrayList();
         // Debug
-        System.out.println("Initialising ArrayList(fps).");
+        System.out.println("Initialised ArrayList(fps).");
         
+        // Debug
+        System.out.println("Starting Sound Engine...");
         se = new SoundEngine();
+        // Debug
+        System.out.println("Initialised Sound Engine.");
                 
         // Begin the starting phase
         phaseChange(1);

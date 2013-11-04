@@ -8,12 +8,12 @@ import java.awt.geom.*;
 public class MainFrame extends JFrame implements KeyListener {
     
     private static String TITLE = "!SUPER-PONG";
-    private static String VERSION = "0.2.1";
+    private static String VERSION = "0.2.2";
 
     private static int WIDTH = 900;
     private static int HEIGHT = 450;
     
-    private boolean FULLSCREEN = false;
+    private boolean FULLSCREEN = true;
     
     private Engine e;
     
