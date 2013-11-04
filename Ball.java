@@ -18,6 +18,9 @@ public class Ball extends GameObject {
     
     Ellipse2D.Double b;
     
+    //Initialise the line that is used for collision with objects
+    private Line2D.Double ballCollisionLine = new Line2D.Double();
+        
     public Ball(int ID, Canvas c) {
         
         OID = ID;
@@ -34,8 +37,11 @@ public class Ball extends GameObject {
         
         b = new Ellipse2D.Double(pos_x, pos_y, size, size);
         
-        System.out.println("Ball created.");
+        //create ball collision line
+        createBallCollisionLine(c);
         
+        System.out.println("Ball created.");
+              
         VISIBLE = true;
         SOLID = true;
         
@@ -110,6 +116,42 @@ public class Ball extends GameObject {
         
     }
     
+    public void createBallCollisionLine(Canvas c) {
+        //Create a line which is from the current position of the ball
+        //to where the ball will be on the next tick
+        //Then we can use the intersects method to detect whether it would
+        //pass through an object, and hence it would collide rather than pass through.
+        
+        double correction = size/2;
+        double x1 = pos_x + correction;
+        double y1 = pos_y + correction;
+                        
+        double x2 = x1 + (c.getWidth() / 100.0)*speed_x;
+        double y2 = y1 + (c.getWidth() / 100.0)*speed_y;
+        if (speed_x < 0) {
+           x2 -= correction;  
+           x1 -= correction;  
+        }
+        else{
+           x2 += correction;
+           x1 += correction;
+        }
+
+        if (speed_y < 0) {
+           y2 -= correction;
+           y1 -= correction;    
+        }
+        else{
+           y2 += correction;
+           y1 += correction;
+        }
+        ballCollisionLine.setLine(x1, y1, x2, y2);
+    }
+    
+    public Line2D.Double getBallCollisionLine(){
+        return ballCollisionLine;
+    }
+    
     public double getPosX() {
         
         return pos_x + (size / 2);
@@ -119,6 +161,18 @@ public class Ball extends GameObject {
     public double getPosY() {
         
         return pos_y + (size / 2);
+        
+    }
+
+    public double getRealPosX() {
+        
+        return pos_x;
+        
+    }
+    
+    public double getRealPosY() {
+        
+        return pos_y;
         
     }
     
@@ -140,20 +194,6 @@ public class Ball extends GameObject {
         
     }
     
-    public boolean doesIntersect(Rectangle2D.Double r) {
-                
-        if (b.intersects(r)) {
-            
-            System.out.println("Does intersect");
-            return true;
-            
-        }
-        
-        System.out.println("Doesnt intesect");
-        return false;
-        
-    } 
-
     public Ellipse2D.Double getBall() {
         
         return b;

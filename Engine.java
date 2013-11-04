@@ -370,6 +370,9 @@ public class Engine implements Runnable {
             
             boolean hasCollided = false;
             
+            //update the collision line of the ball
+            b.createBallCollisionLine(c);
+            
             // start the collision detection
             for (int x = 0; x < objects.size(); x++) {
                 
@@ -389,8 +392,6 @@ public class Engine implements Runnable {
                 }
             }
             //move the ball if it doesnt collide
-            
-            
             b.updatePos(c);
   
         }
