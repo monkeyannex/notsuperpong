@@ -57,6 +57,8 @@ public class Engine implements Runnable {
     
     private Canvas c;
     
+    private SoundEngine se;
+    
     //private MonkeyScreen splash1;
     
     // Constructor
@@ -83,9 +85,8 @@ public class Engine implements Runnable {
         // Debug
         System.out.println("Initialising ArrayList(fps).");
         
-        // Debug
-        System.out.println("Engine Created.");
-        
+        se = new SoundEngine();
+                
         // Begin the starting phase
         phaseChange(1);
         
@@ -181,7 +182,7 @@ public class Engine implements Runnable {
             else System.out.println("Cannot repaint screen; Canvas not started.");
             
             // Debug
-            System.out.println("Game Objects: " + objects.size());
+            //System.out.println("Game Objects: " + objects.size());
             
             //RUNNING_TIME = System.nanoTime() - START_TIME;
             
@@ -235,7 +236,7 @@ public class Engine implements Runnable {
         
         // Debug
         // Show how long the startup phase has been going
-        System.out.println("P1-TIMER: " + TIMER + " secs");
+        //System.out.println("P1-TIMER: " + TIMER + " secs");
         
         if(TIMER > (splash1_length + 1.0)) {
             
@@ -287,7 +288,7 @@ public class Engine implements Runnable {
         
         // Debug
         // Show how long the startup phase has been going
-        System.out.println("P10-TIMER: " + TIMER / 1000000000 + " secs");
+        //System.out.println("P10-TIMER: " + TIMER / 1000000000 + " secs");
         
         // Convert to seconds for ease of use
         //long TIMER_SECS = TIMER / 1000000000;
@@ -299,6 +300,10 @@ public class Engine implements Runnable {
         if(FIRST_RUN) {
             
             TIMER = 0.0;
+            
+            if(ai1 != null) objects.remove(getObjectIndex(ai1.getOID()));
+            if(ai2 != null) objects.remove(getObjectIndex(ai2.getOID()));
+            if(b != null) objects.remove(getObjectIndex(b.getOID()));
             
             objects.add(new AI(nextOID(), 1, c));
             ai1 = (AI)objects.get(getObjectIndex("Player 1"));
@@ -374,7 +379,12 @@ public class Engine implements Runnable {
                     
                     hasCollided = obj.detectCollision(b);
                     
-                    if(hasCollided) break; 
+                    if(hasCollided) {
+                        
+                        se.play("boop");
+                        break;
+                        
+                    } 
                     
                 }
             }
@@ -494,6 +504,12 @@ public class Engine implements Runnable {
         
     }
     
+    //public void setSEngine(SoundEngine sengine) {
+        
+        //se = sengine;
+        
+    //}
+    
     public ArrayList getObjectList() {
         
         return objects;
@@ -582,6 +598,7 @@ public class Engine implements Runnable {
                         
                         removeObject(getObjectIndex(m.getOID()));
                         phaseChange(100);
+                        se.play("select");
                         
                     }
                     else if(m.getSelected().equals("Continue")) {

@@ -18,6 +18,8 @@ public class Menu extends GameObject{
     private String opt_newgame = "New Game";
     private String opt_options = "Options";
     private String opt_exit = "Exit";
+    
+    Rectangle2D.Double background;
 
     public Menu(int objectID) {
         
@@ -28,6 +30,8 @@ public class Menu extends GameObject{
         title = "!SUPER-PONG";
         
         selected = 0;
+        
+        background = new Rectangle2D.Double(0,0,0,0);
         
         m_items = new ArrayList();
         
@@ -42,8 +46,15 @@ public class Menu extends GameObject{
     
     public void draw(Graphics2D g, MainFrame f, Canvas c) {
         
-        int spacing = 30;
+        // Draw a background that will darken the screen
+        Color bg = new Color(0,0,0,200);
         
+        g.setColor(bg);
+        background.setRect(0,0,c.getWidth(),c.getHeight());
+        g.fill(background);
+        
+        int spacing = 30;
+                
         // Setup a bunch of stuff for drawing text
         g.setFont(new Font("default", Font.BOLD, 26));
         

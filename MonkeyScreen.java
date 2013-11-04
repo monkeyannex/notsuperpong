@@ -88,7 +88,8 @@ public class MonkeyScreen extends GameObject{
         
         timer += UPDATE_TIME;
         
-        System.out.println(OID + ": " + timer);
+        // Debug
+        //System.out.println(OID + ": " + timer);
         
     }
 

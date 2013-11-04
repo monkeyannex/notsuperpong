@@ -7,11 +7,13 @@ import java.awt.geom.*;
 
 public class MainFrame extends JFrame implements KeyListener {
     
-    private static String TITLE = "NOTSUPERPONG";
+    private static String TITLE = "!SUPER-PONG";
     private static String VERSION = "0.2.1";
 
     private static int WIDTH = 900;
     private static int HEIGHT = 450;
+    
+    private boolean FULLSCREEN = false;
     
     private Engine e;
     
@@ -43,6 +45,16 @@ public class MainFrame extends JFrame implements KeyListener {
         
         pack();
         setVisible(true);
+        validate();
+        
+        
+        // Enable fullscreen if needed
+        if(FULLSCREEN) {
+            
+            // NOt sure why or how this works, but it enables fullscreen mode
+            GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice().setFullScreenWindow(this);
+            
+        }
         
     }
     
