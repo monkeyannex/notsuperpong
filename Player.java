@@ -19,6 +19,10 @@ public class Player extends GameObject {
     public double paddleWidth = 10;
     public double paddleHeight = 10;
     
+    public double speed_top;
+    public double speed_current;
+    public double speed_increment;
+    
     // set the size of the paddle in terms of percent of the screen size
     private double hScale = 22.5;
     // set the paddle to 1/n of the paddle height
@@ -29,13 +33,13 @@ public class Player extends GameObject {
     
     public int score;
     
-    private Rectangle2D.Double paddle;    
+    private Rectangle2D.Double paddle;
     
     //create the hitbox lines
-    private Line2D.Double hitboxLEFT = new Line2D.Double();; 
-    private Line2D.Double hitboxRIGHT = new Line2D.Double();;
-    private Line2D.Double hitboxTOP = new Line2D.Double();;
-    private Line2D.Double hitboxBOTTOM = new Line2D.Double();; 
+    private Line2D.Double hitboxLEFT = new Line2D.Double();
+    private Line2D.Double hitboxRIGHT = new Line2D.Double();
+    private Line2D.Double hitboxTOP = new Line2D.Double();
+    private Line2D.Double hitboxBOTTOM = new Line2D.Double();
     
     // Default player constructor
     public Player(int ID,int pID, Canvas canvas) {
@@ -48,6 +52,10 @@ public class Player extends GameObject {
         
         OID = ID;
         NAME = "Player " + playerID;
+        
+        speed_top = 10.0;
+        speed_current = 0.0;
+        speed_increment = 0.5;
         
         if (playerID == 1) {
             
@@ -81,7 +89,7 @@ public class Player extends GameObject {
     }
     
     public void draw(Graphics2D g, MainFrame f, Canvas c) {
-        
+                
         calcPos(c);
         
         // draw some info like player name and score
@@ -96,13 +104,13 @@ public class Player extends GameObject {
         
         int x = 0;
         
-        int separation = 80;
+        int separation = (f.getWidth() / 100) * 10;
         
         if(playerID == 1) x = (f.getWidth() / 2) - (txt_width / 2) - separation;
         else if(playerID == 2) x = (f.getWidth() / 2) - (txt_width / 2) + separation;
         int y = c.getHeight() - (txt_height * 2);
         
-        g.setColor(Color.gray);
+        g.setColor(Color.white);
         g.drawString(text1, x , y);
         
         if (playerID == 1) g.setColor(Color.orange);
@@ -115,6 +123,24 @@ public class Player extends GameObject {
                
     }
     
+    public void incrementSpeedCurrent() {
+        
+        if(speed_current < 0) {
+            
+            speed_current += speed_increment;
+            if(speed_current > 0) speed_current = 0;
+            
+        }
+        if(speed_current > 0) {
+            
+            speed_current -= speed_increment;
+            if(speed_current < 0) speed_current = 0;
+            
+        }
+        
+    }
+    
+    // Move the paddle a set distance
     public void movePaddle(double dist) {
         
         // checks to see if the next paddle move will take it off the screen
@@ -123,6 +149,54 @@ public class Player extends GameObject {
         if (pos_y + dist <= 0) pos_y = 0;
         else if (pos_y + dist >= c.getHeight() - paddleHeight) pos_y = c.getHeight() -paddleHeight;
         else pos_y += dist;
+        
+    }
+    
+    // Move the paddle automatically based off its speed
+    public void movePaddle(boolean keyPressed) {
+        
+        // If the paddle shouldnt be moving, dont move it
+        if(speed_current == 0) return;
+        
+        // If the paddles speed is !0 then move it
+        if(speed_current < 0) {
+            
+            pos_y += speed_current;
+            if(!keyPressed) incrementSpeedCurrent();
+            
+        }
+        if(speed_current > 0) {
+            
+            pos_y += speed_current;
+            if(!keyPressed) incrementSpeedCurrent();
+            
+        }
+        
+        // Move the paddle, or dont if it will go off screen
+        if (pos_y < 0) pos_y = 0;
+        else if (pos_y > c.getHeight() - paddleHeight) pos_y = c.getHeight() -paddleHeight;
+        
+        // Update other variables that rely on position
+        pos_x1 = pos_x + paddleWidth;
+        pos_y1 = pos_y + paddleHeight;
+        
+    }
+    
+    // Set the speed to max
+    // Is usually used when play hits the key to move the paddle
+    // true is down
+    public void setSpeedMax(boolean direction) {
+        
+        if(!direction)speed_current = speed_top;
+        if(direction)speed_current = speed_top;
+        
+    }
+    
+    public void setSpeedCurrent(double speed) {
+        
+        if(speed < 0) speed_current = -speed_top;
+        if(speed > 0) speed_current = speed_top;
+        if(speed == 0) speed_current = 0;
         
     }
     
@@ -280,6 +354,9 @@ public class Player extends GameObject {
         
         // set the paddle to the halfway point of the screen
         pos_y = (c.getHeight() / 2.0) - (paddleHeight / 2.0);
+        
+        // reset the paddle speed
+        speed_current = 0.0;
         
     }
     

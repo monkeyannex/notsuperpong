@@ -56,7 +56,7 @@ public class Engine implements Runnable {
     private ArrayList objects;
     
     private Canvas c;
-    
+    private ObjectGenerator generator;
     private SoundEngine se;
     
     //private MonkeyScreen splash1;
@@ -90,6 +90,12 @@ public class Engine implements Runnable {
         se = new SoundEngine();
         // Debug
         System.out.println("Initialised Sound Engine.");
+        
+        // Debug
+        System.out.println("Starting Object Generator...");
+        generator = new ObjectGenerator(this, c);
+        // Debug
+        System.out.println("Initialised Object Generator.");
                 
         // Begin the starting phase
         phaseChange(1);
@@ -306,16 +312,20 @@ public class Engine implements Runnable {
             
             TIMER = 0.0;
             
+            if(p1 != null) objects.remove(getObjectIndex(p1.getOID()));
+            if(p2 != null) objects.remove(getObjectIndex(p2.getOID()));
             if(ai1 != null) objects.remove(getObjectIndex(ai1.getOID()));
             if(ai2 != null) objects.remove(getObjectIndex(ai2.getOID()));
             if(b != null) objects.remove(getObjectIndex(b.getOID()));
             
-            objects.add(new AI(nextOID(), 1, c));
-            ai1 = (AI)objects.get(getObjectIndex("Player 1"));
+            objects.add(new Player(nextOID(), 1, c));
+            p1 = (Player)objects.get(getObjectIndex("Player 1"));
             objects.add(new AI(nextOID(), 2, c));
             ai2 = (AI)objects.get(getObjectIndex("Player 2"));
             objects.add(new Ball(nextOID(), c));
             b = (Ball)objects.get(getObjectIndex("Ball"));
+            
+            resetGame();
             
             FIRST_RUN = false;
             
@@ -324,18 +334,23 @@ public class Engine implements Runnable {
         else TIMER += (double)UPDATE_TIME / 1000000000;
         
         if (b != null) {
+			
+			boolean moveKeyPressed = false;
+			
+			// 
+			if(KEY_S || KEY_W) moveKeyPressed = true;
                 
+            // Update the players paddle position based on its speed
+            if(p1 != null) p1.movePaddle(moveKeyPressed);
+            if(p2 != null) p2.movePaddle(moveKeyPressed);
+            
+            // Update the AIs paddle based on how smart it is
+            if (ai1 != null) ai1.runAI(b.getPosX(), b.getPosY(), b.getSpeedX());
+            if (ai2 != null) ai2.runAI(b.getPosX(), b.getPosY(), b.getSpeedX());
+            
+            generator.spawner();
+            
             collisionDetect();
-                    
-            //b.updatePos();
-                        
-            //AI
-            if (ai1 != null) {
-                ai1.runAI(b.getPosX(), b.getPosY(), b.getSpeedX());
-            }
-            if (ai2 != null) {
-                ai2.runAI(b.getPosX(), b.getPosY(), b.getSpeedX());
-            }
                                            
         }
         else System.out.println("Ball does not exist yet.");
@@ -349,9 +364,15 @@ public class Engine implements Runnable {
             double pos_x = b.getPosX();
             double pos_y = b.getPosY();
             
+            // detect collision with the top and bottom of the screen
+            if ( pos_y <= 0 ) b.invertSpeedY();
+            if ( pos_y >= c.getHeight() ) b.invertSpeedY();
+            
+            // detect whether a player has scored
             if ( pos_x <= - b.getSize() - 10.0 ) {
                 
-                ai2.incrementScore();
+                if(p2 != null) p2.incrementScore();
+                if(ai2 != null) ai2.incrementScore();
                 resetGame();              
                 //b.invertSpeedX();
                 
@@ -359,19 +380,12 @@ public class Engine implements Runnable {
             
             if ( pos_x >= c.getWidth() + b.getSize() + 10.0 ) {
                 
-                ai1.incrementScore();
+                if(p1 != null) p1.incrementScore();
+                if(ai1 != null) ai1.incrementScore();
                 resetGame();
                 //b.invertSpeedX();
                 
             }
-            
-            // detect collision with the top and bottom of the screen
-            if ( pos_y <= 0 ) b.invertSpeedY();
-            if ( pos_y >= c.getHeight() ) b.invertSpeedY();
-            
-            
-            //p1.detectCollision(b);
-            //p2.detectCollision(b);
             
             boolean hasCollided = false;
             
@@ -417,7 +431,7 @@ public class Engine implements Runnable {
                 b.invertSpeedY();
             }
             
-            ai1.resetPaddle(c);
+            p1.resetPaddle(c);
             ai2.resetPaddle(c);
             
         }
@@ -496,7 +510,7 @@ public class Engine implements Runnable {
     }
     
     // Increase the unique object ID number then return it.
-    private int nextOID() {
+    public int nextOID() {
         
         OID++;
         
@@ -509,12 +523,6 @@ public class Engine implements Runnable {
         c = canvas;
         
     }
-    
-    //public void setSEngine(SoundEngine sengine) {
-        
-        //se = sengine;
-        
-    //}
     
     public ArrayList getObjectList() {
         
@@ -573,6 +581,10 @@ public class Engine implements Runnable {
         return PHASE;
         
     }
+    
+    // Key stoke booleans
+    private boolean KEY_W = false;	// Player 1 'up'
+    private boolean KEY_S = false;	// Player 1 'down'
     
     public void keyPress(int key) {
         
@@ -636,7 +648,49 @@ public class Engine implements Runnable {
 
         }
         
+        else if(PHASE == 100) {
+            
+            switch(key) {
+                
+                case 87:
+                    if(p1.getType().equals("PADDLE")) {
+						KEY_S = true;
+						p1.setSpeedCurrent(-1);
+					}
+                    break;
+                    
+                case 83:
+                    if(p1.getType().equals("PADDLE")) {
+						KEY_W = true;
+						p1.setSpeedCurrent(1);
+					}
+                    break;
+                
+            }
+            
+        }
+        
     }
+    
+    public void keyRelease(int key) {
+		
+		if(PHASE == 100) {
+            
+            switch(key) {
+                
+                case 87:
+                    if(p1.getType().equals("PADDLE")) KEY_S = false;//p1.setSpeedCurrent(-1);
+                    break;
+                    
+                case 83:
+                    if(p1.getType().equals("PADDLE")) KEY_W = false;//p1.setSpeedCurrent(1);
+                    break;
+                
+            }
+            
+        }
+		
+	}
     
     public long getUT() {
         

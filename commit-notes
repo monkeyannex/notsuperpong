@@ -1,0 +1,22 @@
+v0.2.2 - Movement and Obstacles
+
+Changed the way that player movement of the paddles work
+
+Also added the ability to 'randomly' create objects that spawn in the game
+
+A bunch more small updates and fixes
+
+-Updated the first run code of phase100 to actually reset to starting positions
+ Before the paddles spawned at the top of the screen and the ball spawned in the center
+-Started drawing the game board to replace the plain black one
+    -Added a gradient background
+    -Added a center line
+    -Added '!SUPER-PONG' title
+-Set Player 1 to be human controled, not AI
+-Changed the way the paddles move
+    -The paddle now moves based on its speed, and deccelerates when the move key is no longer held down
+    -There is also now now stutter when initally holding down a key to move the paddle
+-Started to design the random generation system for game objects
+    -The Engine creates the ObjectGenerator, and calls it every cycle
+    -The ObjectGenerator then checks if it should spawn something(currently set to every 3 seconds) and spawns a basic object
+    

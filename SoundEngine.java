@@ -33,25 +33,6 @@ public class SoundEngine {
     
     }
     
-    /*public void run() {
-        
-        while(RUNNING) {
-            
-            
-            // Sleep the thread
-            try {
-                                    
-                Thread.sleep(SLEEP_TIME);
-            
-            } 
-            catch (InterruptedException ie) {
-                System.out.println(ie);
-            }
-            
-        }
-        
-    }*/
-    
     public void play(final String toPlay) {
         
         SwingWorker worker = new SwingWorker<Void, Void>() {

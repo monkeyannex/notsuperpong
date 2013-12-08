@@ -83,6 +83,8 @@ public class MainFrame extends JFrame implements KeyListener {
         // debug: shows the key released
         System.out.println("KEYRELEASED: " + key);
         
+        e.keyRelease(key);
+        
         
     }
     

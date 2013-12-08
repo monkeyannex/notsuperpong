@@ -14,6 +14,8 @@ public class AI extends Player{
         // only react when its in its own half of the screen
         reactionTH = c.getWidth() / 2;
         
+        TYPE = "AIPADDLE";
+        
     }
     
     
